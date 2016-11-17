@@ -8,7 +8,7 @@ var webdriver = require('selenium-webdriver'),
     until = webdriver.until,
     test = require('selenium-webdriver/testing');
 
-test.describe('Google Search', function() {
+test.describe('Task 3. Login admin panel', function() {
     var driver;
 
     test.before(function() {
@@ -16,15 +16,19 @@ test.describe('Google Search', function() {
             .forBrowser('chrome')
             .build();
     });
-
-    test.it('should append query to title', function() {
-        driver.get('http://www.google.com');
-        driver.findElement(By.name('q')).sendKeys('webdriver');
-        driver.findElement(By.name('btnG')).click();
-        driver.wait(until.titleIs('webdriver - Поиск в Google'), 1000);
-    });
-
     test.after(function() {
+        driver.sleep('5000');  //Что бы успеть заметить конечное состояние
         driver.quit();
     });
+
+    test.it('Открыть страницу авторизации', function() {
+        driver.get('http://localhost/litecart/admin/');
+        driver.findElement(By.name('username')).sendKeys('admin');  //.click().clear()
+        driver.findElement(By.css('input[name="password"]')).sendKeys('admin');  //.click()
+        driver.sleep('1000');  //Для визуальной отладки
+        driver.findElement(By.name('login')).click();
+        driver.wait(until.titleIs('My Store'), 1000); //Todo ожидать элемент
+    });
+
+
 });
