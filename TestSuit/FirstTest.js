@@ -23,11 +23,21 @@ test.describe('Task 3. Login admin panel', function() {
 
     test.it('Открыть страницу авторизации', function() {
         driver.get('http://localhost/litecart/admin/');
-        driver.findElement(By.name('username')).sendKeys('admin');  //.click().clear()
-        driver.findElement(By.css('input[name="password"]')).sendKeys('admin');  //.click()
-        driver.sleep('1000');  //Для визуальной отладки
-        driver.findElement(By.name('login')).click();
-        driver.wait(until.titleIs('My Store'), 1000); //Todo ожидать элемент
+        var loginField = driver.findElement(By.name('username')),
+            passField = driver.findElement(By.css('input[name="password"]')),
+            submitButton = driver.findElement(By.name('login'));
+        //Ввели логин
+        loginField.click();
+        loginField.clear();
+        loginField.sendKeys('admin');
+        //Ввели пароль
+        passField.click();
+        passField.clear();
+        passField.sendKeys('admin');
+        //Нажали кнопку вход
+        submitButton.click();
+        //
+        driver.wait(driver.findElement(By.css('td#sidebar')).isDisplayed(), 10000);
     });
 
 
