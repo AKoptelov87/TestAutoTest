@@ -71,7 +71,7 @@ test.describe('Firefox. Login admin panel', function() {
         passField.sendKeys('admin');
         //Нажали кнопку вход
         submitButton.click();
-        driver.sleep('2000');
+        driver.sleep('1000');
         //
         driver.wait(driver.findElement(By.css('td#sidebar')).isDisplayed(), 10000);
     });
