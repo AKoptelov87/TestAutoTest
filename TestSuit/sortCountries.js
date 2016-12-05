@@ -51,6 +51,7 @@ test.describe('Task 9. Check sorts of countries and geo zones in the admin panel
     });
 
     test.it('Проверяем сортировку списка стран', function () {
+        console.log('Проверяем сортировку списка стран');
         driver.findElements(by.css('tr.row > td:nth-child(5) > a'))
             .then(function (allCountries) {
                 var sourceList = [];
@@ -67,7 +68,7 @@ test.describe('Task 9. Check sorts of countries and geo zones in the admin panel
             .then(function (sourceList) {
                 var targetList = sourceList.slice().sort();
                 assert.deepEqual(sourceList, targetList, 'Порядок сортировки нарушен!');
-                console.log('Все зоны в алфавитном порядке');
+                console.log('Все зоны в алфавитном порядке \n\n');
             })
     });
 
@@ -133,7 +134,7 @@ test.describe('Task 9. Check sorts of countries and geo zones in the admin panel
                     console.log(error);
                     assert.fail(error.length, 0, 'Присутсвуют ошибки в сортировке', '>');
                 } else {
-                    console.log('Все зоны в алфавитном порядке');
+                    console.log('Все зоны в алфавитном порядке \n\n');
                 }
             })
 
