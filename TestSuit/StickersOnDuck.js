@@ -39,7 +39,7 @@ test.describe('Task 8. Find stickers', function () {
                         .then(function (duckName) {
                             someDuck.findElements(by.css('div.sticker'))
                                 .then(function (stickers) {
-                                    result = "У товара "+ duckName +" найдено " + stickers.length + "стикеров";
+                                    result = "У товара "+ duckName +" найдено стикеров: " + stickers.length;
                                     console.log( result);
                                     if (stickers.length === 0 || stickers.length > 1) {
                                           error.push(result);
