@@ -48,25 +48,31 @@ test.describe('Task 10. Check that the correct product page opens', function () 
             regPrice.getCssValue('color'),
             regPrice.getCssValue('text-decoration'),
             regPrice.getCssValue('font-size'),
+            regPrice.getCssValue('font-weight'),
+
             //новая цена
             camPrice.getTagName(),
             camPrice.getCssValue('color'),
             camPrice.getCssValue('text-decoration'),
-            camPrice.getCssValue('font-size')
+            camPrice.getCssValue('font-size'),
+            camPrice.getCssValue('font-weight')
         ]).then(function (result) {
+            console.log(result); //для отладки
             var errors = ['\nPезультаты проверки старой цены: '];
             // первая цена серая, зачёркнутая, маленькая
             if (result[0] !== 's') { errors.push('\n   некорректный тег') };
             if (result[1] !== 'rgba(119, 119, 119, 1)') { errors.push('\n   некорректный цвет') };
             if (result[2] !== 'line-through') { errors.push('\n   цена не зачеркнута') };
             if (result[3] !== '14.4px') { errors.push('\n   некорректный размер шрифта') };
+            if (result[4] !== 'normal') { errors.push('\n   некорректная жирность шрифта') };
 
-            errors.push('\nPезультаты проверки старой цены: ');
+            errors.push('\nPезультаты проверки новой цены: ');
             // вторая цена красная, жирная, крупная
-            if (result[4] !== 'strong') { errors.push('\n   некорректный тег') };
-            if (result[5] !== 'rgba(204, 0, 0, 1)') { errors.push('\n   некорректный цвет') };
-            if (result[6] !== 'none') { errors.push('\n   цена зачеркнута') };
-            if (result[7] !== '18px') { errors.push('\n   некорректный размер шрифта') };
+            if (result[5] !== 'strong') { errors.push('\n   некорректный тег') };
+            if (result[6] !== 'rgba(204, 0, 0, 1)') { errors.push('\n   некорректный цвет') };
+            if (result[7] !== 'none') { errors.push('\n   цена зачеркнута') };
+            if (result[8] !== '18px') { errors.push('\n   некорректный размер шрифта') };
+            if (result[9] !== 'bold') { errors.push('\n   некорректная жирность шрифта') };
 
             return errors.length != 2 ? done(errors) : done() ;
         });
@@ -100,26 +106,31 @@ test.describe('Task 10. Check that the correct product page opens', function () 
             regPrice.getCssValue('color'),
             regPrice.getCssValue('text-decoration'),
             regPrice.getCssValue('font-size'),
+            regPrice.getCssValue('font-weight'),
+
             //новая цена
             camPrice.getTagName(),
             camPrice.getCssValue('color'),
             camPrice.getCssValue('text-decoration'),
-            camPrice.getCssValue('font-size')
+            camPrice.getCssValue('font-size'),
+            camPrice.getCssValue('font-weight')
         ]).then(function (result) {
-            // console.log(result); //для отладки
+            console.log(result); //для отладки
             var errors = ['\nPезультаты проверки старой цены: '];
             // первая цена серая, зачёркнутая, маленькая
             if (result[0] !== 's') { errors.push('\n   некорректный тег') };
-            if (result[1] !== 'rgba(119, 119, 119, 1)') { errors.push('\n   некорректный цвет') };
+            if (result[1] !== 'rgba(102, 102, 102, 1)') { errors.push('\n   некорректный цвет') };
             if (result[2] !== 'line-through') { errors.push('\n   цена не зачеркнута') };
             if (result[3] !== '16px') { errors.push('\n   некорректный размер шрифта') };
+            if (result[4] !== 'normal') { errors.push('\n   некорректная жирность шрифта') };
 
-            errors.push('\nPезультаты проверки старой цены: ');
+            errors.push('\nPезультаты проверки новой цены: ');
             // вторая цена красная, жирная, крупная
-            if (result[4] !== 'strong') { errors.push('\n   некорректный тег') };
-            if (result[5] !== 'rgba(204, 0, 0, 1)') { errors.push('\n   некорректный цвет') };
-            if (result[6] !== 'none') { errors.push('\n   цена зачеркнута') };
-            if (result[7] !== '22px') { errors.push('\n   некорректный размер шрифта') };
+            if (result[5] !== 'strong') { errors.push('\n   некорректный тег') };
+            if (result[6] !== 'rgba(204, 0, 0, 1)') { errors.push('\n   некорректный цвет') };
+            if (result[7] !== 'none') { errors.push('\n   цена зачеркнута') };
+            if (result[8] !== '22px') { errors.push('\n   некорректный размер шрифта') };
+            if (result[9] !== 'bold') { errors.push('\n   некорректная жирность шрифта') };
 
             return errors.length != 2 ? done(errors) : done() ;
         });
