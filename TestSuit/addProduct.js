@@ -10,7 +10,7 @@ var webdriver = require('selenium-webdriver'),
     assert = require('assert');
 
 test.describe('Task 12. Make a script add an item', function () {
-    var driver,
+    var driver, startCount,
         productToAdd = {
             General: {
                 status: 'Enabled',
@@ -27,15 +27,23 @@ test.describe('Task 12. Make a script add an item', function () {
                 dateValidTo: '31.12.2016'
             },
             Information: {
-                manufacturer: '',
+                manufacturer: 'ACME',
                 supplier: '',
-                keywords: '',
-                shortDescription: '',
-                description: '',
-                headTitle: '',
-                metaDescription: ''
+                keywords: 'duck, test, new',
+                shortDescription: 'this is TestDuck',
+                description: 'It\'s cool proDuckt \n create by autotest',
+                headTitle: 'TestDuck',
+                metaDescription: '#TestDuck'
             },
-            Prices: {}
+            Prices: {
+                purchasePrice: '10',
+                purchasePriceCurrency: 'Dollars',
+                taxClass: '',
+                priceUSD: '40',
+                priceInclTaxUSD: '29',
+                priceEUR: '60',
+                priceInclTaxEUR: '49'
+            }
         };
 
     test.before(function () {
@@ -77,6 +85,12 @@ test.describe('Task 12. Make a script add an item', function () {
     });
 
     test.it('Нажать кнопку добавить продукт', function () {
+        driver.findElement(by.css('table.dataTable tr.footer td')).getText()
+            .then(function (text) {
+                // console.log('\n\n'+text);
+                startCount = text.match(/Products: ([0-9]+)/)[1];
+                console.log('Сейчас продуктов: '+startCount);
+            });
         driver.findElement(by.xpath('//td[@id="content"]//a[contains(text(),"Add New Product")]')).click()
 
     });
@@ -166,9 +180,76 @@ test.describe('Task 12. Make a script add an item', function () {
 
     test.it('Заполняем вкладку Information', function () {
         driver.findElement(by.css('div.tabs a[href="#tab-information"]')).click();
-        var workspace = driver.findElement(by.css('div#tab-information'));
+        var workspace = driver.findElement(by.css('div#tab-information')),
+         description = workspace.findElement(by.css('div.trumbowyg-editor'));
 
-        
-    })
+        // выбираем производителя
+        if (productToAdd.Information.manufacturer != '') {
+            workspace.findElement(by.xpath('//select[@name="manufacturer_id"]//option[contains(text(),"' + productToAdd.Information.manufacturer + '")]')).click();
+        } else {console.log('\n manufacturer set default')}
 
+        // выбираем поставщика
+        if (productToAdd.Information.supplier != '') {
+            workspace.findElement(by.xpath('//select[@name="supplier_id"]//option[contains(text(),"' + productToAdd.Information.supplier + '")]')).click();
+        } else {console.log('\n manufacturer set default')}
+
+        //заполняем Ключевые слова
+        workspace.findElement(by.name('keywords')).sendKeys(productToAdd.Information.keywords);
+
+        //заполняем Краткое описание
+        workspace.findElement(by.name('short_description[en]')).sendKeys(productToAdd.Information.shortDescription);
+
+        //заполняем Описание
+        description.click();
+        description.sendKeys(productToAdd.Information.description);
+
+        //заполняем Заголовок
+        workspace.findElement(by.name('head_title[en]')).sendKeys(productToAdd.Information.headTitle);
+
+        //заполняем мета теги
+        workspace.findElement(by.name('meta_description[en]')).sendKeys(productToAdd.Information.metaDescription);
+    });
+
+    test.it('Заполняем вкладку Prices', function () {
+        driver.findElement(by.css('div.tabs a[href="#tab-prices"]')).click();
+        var workspace = driver.findElement(by.css('div#tab-prices'));
+
+        //заполняем стоимость доставки
+        workspace.findElement(by.name('purchase_price')).sendKeys(productToAdd.Prices.purchasePrice);
+
+        //выбираем единицы стоимости доставки
+        if (productToAdd.Prices.purchasePriceCurrency != '') {
+            workspace.findElement(by.xpath('//select[@name="purchase_price_currency_code"]//option[contains(text(),"' + productToAdd.Prices.purchasePriceCurrency + '")]')).click();
+        } else {console.log('\n purchase price currency set default')}
+
+        //выбираем класс доставки
+        if (productToAdd.Prices.taxClass != '') {
+            workspace.findElement(by.xpath('//select[@name="tax_class_id"]//option[contains(text(),"' + productToAdd.Prices.taxClass + '")]')).click();
+        } else {console.log('\n tax class set default')}
+
+        //заполняем стоимость в баксах
+        workspace.findElement(by.name('prices[USD]')).sendKeys(productToAdd.Prices.priceUSD);
+
+        //заполняем стоимость в баксах без НДС
+        workspace.findElement(by.name('gross_prices[USD]')).sendKeys(productToAdd.Prices.priceInclTaxUSD);
+
+        //заполняем стоимость в евро
+        workspace.findElement(by.name('prices[EUR]')).sendKeys(productToAdd.Prices.priceEUR);
+
+        //заполняем стоимость в евро без НДС
+        workspace.findElement(by.name('gross_prices[EUR]')).sendKeys(productToAdd.Prices.priceInclTaxEUR);
+    });
+
+    test.it('Сохраняем продукт', function () {
+        driver.findElement(by.name('save')).click();
+    });
+    test.it('Проверяем кол-во уточек', function () {
+        driver.findElement(by.css('table.dataTable tr.footer td')).getText()
+            .then(function (text) {
+                // console.log('\n\n'+text);
+                count = text.match(/Products: ([0-9]+)/)[1];
+                console.log('\n Стало продуктов: '+count);
+                assert.notEqual(count, startCount, 'Кол-во продуктов не изменилось')
+            });
+    });
 })
