@@ -4,7 +4,6 @@
 var webdriver = require('selenium-webdriver'),
     chrome = require('selenium-webdriver/chrome'),
     by = webdriver.By,
-    until = webdriver.until,
     test = require('selenium-webdriver/testing'),
     assert = require('assert');
 

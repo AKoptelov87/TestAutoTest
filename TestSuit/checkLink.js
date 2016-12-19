@@ -13,10 +13,7 @@ var webdriver = require('selenium-webdriver'),
 
 test.describe('Task 14. Make sure that the links open in a new window', function () {
     var driver,
-    /**
-     *  Но в этом упражнении требуется именно кликнуть по ссылке, чтобы она открылась в новом окне, потом переключиться в новое окно, закрыть его, вернуться обратно, и повторить эти действия для всех таких ссылок.
-     Не забудьте, что новое окно открывается не мгновенно, поэтому требуется ожидание открытия окна.
-     */
+    //функция нахождения разницы между массивами идентификаторов окон
     getNewWindow = function (oldWindowsID) {
         var winIDs = [];
         driver.getAllWindowHandles().then(function (newWindowsID) {
@@ -85,7 +82,7 @@ test.describe('Task 14. Make sure that the links open in a new window', function
                             link.click();
                             //ждем
                             driver.wait(function () { return driver.getAllWindowHandles()
-                                .then(function (newWindows) {
+                                .then(function (newWindows) {  //вернет t/f для вейта
                                         console.log(windows.length +' : '+newWindows.length);
                                         return windows.length < newWindows.length;
                                     })
