@@ -10,7 +10,7 @@ var webdriver = require('selenium-webdriver'),
     assert = require('assert');
 
 test.describe('Task 17. Check the messages in the browser log', function () {
-    var driver, countOfMenu, error = [];
+    var driver, error = [];
 
     test.before(function () {
         driver = new webdriver.Builder()
@@ -49,7 +49,7 @@ test.describe('Task 17. Check the messages in the browser log', function () {
         driver.findElement(by.xpath('//td[@id="content"]/h1[contains(text(),"Catalog")]'));
     });
 
-    test.it('Открыть каталог', function () {
+    test.xit('Открыть каталог', function () {
         driver.wait(until.elementLocated(by.xpath('//table[@class="dataTable"]//td[i[@class="fa fa-folder"]]/a')), 1000)
             .then(function () {
                 driver.findElement(by.xpath('//table[@class="dataTable"]//td[i[@class="fa fa-folder"]]/a')).click()
@@ -60,20 +60,34 @@ test.describe('Task 17. Check the messages in the browser log', function () {
         driver.findElements(by.css('table.dataTable td > img + a'))
             .then(function (ducks) {
                 count = ducks.length;
-                console.log(count);
                 //так как все товары снизу - перебираем с конца, но последняя строка - футер
                 for (var i = 2; i <= count+1; i++){
                     driver.findElement(by.css('table.dataTable tr:nth-last-child('+i+') img + a')).click();
+                    //проверяем логи и запоминаем название
+                    Promise.all([
+                        driver.manage().logs().get('browser'),
+                        driver.findElement(by.css('h1')).getText()
+                    ]).then(function (result) {
+                        //закидываем все в массивчик
+                        error.push(result)
+                    });
                     driver.findElement(by.name('cancel')).click();
+                }
+            })
+            .then(function () {
+                for (var i = 0; i < error.length; i++){
+                    console.log(error[i][1] + '; Logs: ' + error[i][0]);
+                    //проверяем  полученный массив на ошибки на страницах товаров
+                    assert.equal(error[i][0].length, 0, 'console not empty when ' + error[i][1]);
                 }
             })
     });
 
-    test.it('Проверка, что полученный лог браузера не содержит ошибок', function () {
+    test.it('Проверка, что полученный общий лог браузера не содержит ошибок', function () {
         driver.manage().logs().get('browser')
             .then(function (browserLog) {
-                console.log('консолька браузера: '+browserLog);
+                console.log('\n итоговая консолька браузера: '+browserLog);
                 assert.equal(browserLog.length, 0, 'В логе браузера существуют сообщения об ошибках');
-        });
+            });
     });
 })
